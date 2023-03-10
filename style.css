@@ -1,3 +1,6 @@
+*{
+    border-radius: 5px;
+}
 body {
     background-color: blanchedalmond;
     color: antiquewhite;
@@ -9,11 +12,13 @@ body {
     background-color: rgb(49, 44, 32);
     border-radius: 10px;
     padding: 6px;
+    margin: 50px
 }
 
 .yokonarabi{
     display: grid;
     grid-template-columns:1fr 1fr 1fr 1fr;
+    height:50px;
 }
 
 .secondTakeTwo{
@@ -22,16 +27,22 @@ body {
     color: rgb(247, 247, 244);
 }
 
-.firstTakeThree{
-    grid-template-columns:3fr 1fr;
+.answer {
+    background-color: rgb(49, 44, 32);
+}
 
+#currentDisplay, #currentAnswer{
+    text-align: right;
+    justify-content: center;
+    padding-right: 15px;
+    padding-top:15px;
 }
 
 .firstTakeTwo{
     grid-template-columns:2fr 1fr 1fr;
 }
 
-.digit, .operator, #currentAnswer, #btnClear{
+.digit, .operator, #clear{
     padding: 1px;
 }
 
@@ -42,7 +53,7 @@ body {
     background-color: orange;
 }
 
-#btnClear{
+#clear{
     background-color: rgb(243, 110, 66);
     color: whitesmoke;
     opacity: 100%;
@@ -51,4 +62,6 @@ body {
     width: 100%;
     height: 100%;
     opacity: 50%;
+    font-size: 20px;
+
 }
