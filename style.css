@@ -1,3 +1,54 @@
 body {
     background-color: blanchedalmond;
+    color: antiquewhite;
+    text-align: center;
+}
+
+.board{
+    width: 400px;
+    background-color: rgb(49, 44, 32);
+    border-radius: 10px;
+    padding: 6px;
+}
+
+.yokonarabi{
+    display: grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+}
+
+.secondTakeTwo{
+    grid-template-columns:1fr 2fr 1fr;
+    background-color: rgb(85, 77, 57);
+    color: rgb(247, 247, 244);
+}
+
+.firstTakeThree{
+    grid-template-columns:3fr 1fr;
+
+}
+
+.firstTakeTwo{
+    grid-template-columns:2fr 1fr 1fr;
+}
+
+.digit, .operator, #currentAnswer, #btnClear{
+    padding: 1px;
+}
+
+.digit{
+    background-color: rgb(117, 109, 89);
+}
+.operator{
+    background-color: orange;
+}
+
+#btnClear{
+    background-color: rgb(243, 110, 66);
+    color: whitesmoke;
+    opacity: 100%;
+}
+.button{
+    width: 100%;
+    height: 100%;
+    opacity: 50%;
 }
