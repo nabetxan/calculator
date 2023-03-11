@@ -177,21 +177,30 @@ function inputOperator(value) {
     num = "";
     symbol = operatorObj[value].symbol;
     inputSymbol(symbol);
-    a = operate(operator, a, b);
     // You should round answers with long decimals so that they don’t overflow the screen.
-    answerDisplay.textContent = a.toFixed(2);
+    a = operate(operator, a, b);
+    checkDecimal(a);
   } else if (a !== "" && value !== "equal") {
     b = num;
     symbol = operatorObj[value].symbol; // value?
     inputSymbol(symbol);
     a = operate(operator, a, b);
-    answerDisplay.textContent = a.toFixed(2);
+    checkDecimal(a);
     b = "";
     num = "";
     operator = value;
   } else if (a === "" && value === "equal") {
   }
 }
+
+// if the answer doesn't have decimal, no need to show ".00"
+const checkDecimal = function (a) {
+  if (Number.isInteger(a)) {
+    answerDisplay.textContent = a;
+  } else {
+    answerDisplay.textContent = a.toFixed(2);
+  }
+};
 
 const disableMostButtons = function () {
   allButtons.forEach(function (button) {
@@ -241,7 +250,6 @@ btnEqual.addEventListener("click", function () {
   // after "=", you can only click "clear"
   disableMostButtons();
 });
-
 
 // Add a “backspace” button, so the user can undo if they click the wrong number.
 // Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
