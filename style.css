@@ -65,3 +65,8 @@ body {
     font-size: 20px;
 
 }
+
+.button:disabled {
+    color: rgb(125, 125, 125);
+    background-color: antiquewhite;
+}
