@@ -156,6 +156,16 @@ function inputOperator(value) {
     return;
   }
 
+  // not allowing to divide by 0
+  if (
+    (Number(num) === 0 && value === "divide") ||
+    (Number(num) === 0 && operator === "divide")
+  ) {
+    answerDisplay.textContent = "you cannot divide by 0…";
+    disableMostButtons();
+    return;
+  }
+
   if (a === "") {
     a = num;
     num = "";
@@ -172,7 +182,7 @@ function inputOperator(value) {
     answerDisplay.textContent = a.toFixed(2);
   } else if (a !== "" && value !== "equal") {
     b = num;
-    symbol = operatorObj[operator].symbol;
+    symbol = operatorObj[value].symbol; // value?
     inputSymbol(symbol);
     a = operate(operator, a, b);
     answerDisplay.textContent = a.toFixed(2);
@@ -182,6 +192,14 @@ function inputOperator(value) {
   } else if (a === "" && value === "equal") {
   }
 }
+
+const disableMostButtons = function () {
+  allButtons.forEach(function (button) {
+    if (button !== btnClear) {
+      button.disabled = true;
+    }
+  });
+};
 
 btnDivide.addEventListener("click", function () {
   inputOperator("divide");
@@ -220,15 +238,10 @@ btnEqual.addEventListener("click", function () {
   // isEqualClicked = true;
   inputOperator("equal");
 
-    allButtons.forEach(function (button) {
-      if (button !== btnClear) {
-        button.disabled = true;
-      }
-    });
+  // after "=", you can only click "clear"
+  disableMostButtons();
 });
 
-// after "=", you can only click "clear"
-// Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
 
 // Add a “backspace” button, so the user can undo if they click the wrong number.
 // Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
