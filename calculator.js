@@ -165,14 +165,15 @@ function inputOperator(value) {
     num = "";
     symbol = operatorObj[value].symbol;
     inputSymbol(symbol);
-    answerDisplay.textContent = operate(operator, a, b);
-    a = answerDisplay.textContent;
+    a = operate(operator, a, b);
+    // You should round answers with long decimals so that they don’t overflow the screen.
+    answerDisplay.textContent = a.toFixed(2);
   } else if (a !== "" && value !== "equal") {
     b = num;
     symbol = operatorObj[operator].symbol;
     inputSymbol(symbol);
-    answerDisplay.textContent = operate(operator, a, b);
-    a = answerDisplay.textContent;
+    a = operate(operator, a, b);
+    answerDisplay.textContent = a.toFixed(2);
     b = "";
     num = "";
     operator = value;
@@ -213,7 +214,11 @@ btnEqual.addEventListener("click", function () {
   inputOperator("equal");
 });
 
-// You should round answers with long decimals so that they don’t overflow the screen.
+
+
+
+
+
 // after "=", you can only click "clear"
 // Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
 
