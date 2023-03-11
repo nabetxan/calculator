@@ -77,6 +77,7 @@ const btnAdd = document.getElementById("btnAdd");
 const btnEqual = document.getElementById("btnEqual");
 const currentDisplay = document.querySelector("#currentDisplay");
 const answerDisplay = document.querySelector("#currentAnswer");
+const allButtons = document.querySelectorAll("button");
 
 let num = "";
 let a = "";
@@ -84,6 +85,7 @@ let b = "";
 let operator = "";
 let symbol = "";
 let currentDisplayValue = "";
+let isEqualClicked = false;
 
 //button
 // chat-kun
@@ -208,16 +210,22 @@ btnClear.addEventListener("click", function () {
   currentDisplay.textContent = "";
   answerDisplay.textContent = 0;
   btnDot.disabled = false;
+  isEqualClicked = false;
+  allButtons.forEach(function (button) {
+    button.disabled = false;
+  });
 });
 
 btnEqual.addEventListener("click", function () {
+  // isEqualClicked = true;
   inputOperator("equal");
+
+    allButtons.forEach(function (button) {
+      if (button !== btnClear) {
+        button.disabled = true;
+      }
+    });
 });
-
-
-
-
-
 
 // after "=", you can only click "clear"
 // Display a snarky error message if the user tries to divide by 0… and don’t let it crash your calculator!
