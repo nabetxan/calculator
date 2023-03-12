@@ -263,7 +263,7 @@ btnEqual.addEventListener("click", function () {
 // Add a “backspace” button, so the user can undo if they click the wrong number.
 // you can delete ONLY the number, not undo the operation
 
-btnBackspace.addEventListener("click", function () {
+const backspaceButtonFunction = function () {
   let str = currentDisplay.textContent;
   // if deleting the dot
   if (str[str.length - 1] === ".") {
@@ -287,11 +287,13 @@ btnBackspace.addEventListener("click", function () {
     num = num.slice(0, -1);
     currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
   }
-});
+};
+
+btnBackspace.addEventListener("click", backspaceButtonFunction);
 
 // Negative numbers: Add support for negative numbers by allowing the user to input a negative sign (-) before the number.
 
-btnPlusMinus.addEventListener("click", function () {
+const plusMinusButtonFunction = function () {
   let str = currentDisplay.textContent;
   let numLength = num.length * -1;
 
@@ -308,7 +310,8 @@ btnPlusMinus.addEventListener("click", function () {
   }
 
   currentDisplay.textContent = str.slice(0, numLength) + " " + num;
-});
+};
+btnPlusMinus.addEventListener("click", plusMinusButtonFunction);
 
 // euro to jpy
 
@@ -322,5 +325,87 @@ btnEuro.addEventListener("click", function () {
 // Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
 //Read the MDN documentation for event.preventDefault to help solve this problem.
 // Error handling: Add error handling to the code to handle edge cases such as division by zero or inputting invalid characters.
+
+document.addEventListener("keydown", function (event) {
+  switch (event.key) {
+    case "0":
+      inputNum(event.key);
+      break;
+    case "1":
+      inputNum(event.key);
+      break;
+    case "2":
+      inputNum(event.key);
+      break;
+    case "3":
+      inputNum(event.key);
+      break;
+    case "4":
+      inputNum(event.key);
+      break;
+    case "5":
+      inputNum(event.key);
+      break;
+    case "6":
+      inputNum(event.key);
+      break;
+    case "7":
+      inputNum(event.key);
+      break;
+    case "8":
+      inputNum(event.key);
+      break;
+    case "9":
+      inputNum(event.key);
+      break;
+
+    // Add cases for the other buttons
+    case "Backspace":
+      backspaceButtonFunction();
+      break;
+    case "-":
+      if (event.shiftKey) {
+        plusMinusButtonFunction();
+      } else {
+        inputOperator("subtract");
+      }
+      break;
+    case "+":
+      if (event.shiftKey) {
+        plusMinusButtonFunction();
+      } else {
+        inputOperator("add");
+      }
+      break;
+    // case "-":
+    //   inputOperator("subtract");
+    //   break;
+    case "*":
+      inputOperator("multiply");
+      break;
+    case "/":
+      inputOperator("divide");
+      break;
+    case "=":
+    case "Enter":
+      // isEqualClicked = true;
+      inputOperator("equal");
+      // after "=", you can only click "clear"
+      disableMostButtons();
+      break;
+    case "Delete":
+      reset();
+      break;
+    case ".":
+      if (btnDot.disabled === false) {
+        inputNum(".");
+      }
+      break;
+
+    default:
+      console.log(event.key);
+      break;
+  }
+});
 
 // add sound
