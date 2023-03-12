@@ -24,18 +24,22 @@ const operatorObj = {
   add: {
     function: add,
     symbol: "+",
+    contorary: "subtract",
   },
   subtract: {
     function: subtract,
     symbol: "-",
+    contorary: "add",
   },
   multiply: {
     function: multiply,
     symbol: "×",
+    contorary: "divide",
   },
   divide: {
     function: divide,
     symbol: "÷",
+    contorary: "multiply",
   },
   equal: {
     symbol: "=",
@@ -75,6 +79,9 @@ const btnMultiply = document.getElementById("btnMultiply");
 const btnSubtract = document.getElementById("btnSubtract");
 const btnAdd = document.getElementById("btnAdd");
 const btnEqual = document.getElementById("btnEqual");
+const btnBackspace = document.getElementById("btnBackspace");
+const btnEuro = document.getElementById("btnEuro");
+const btnPlusMinus = document.getElementById("btnPlusMinus");
 const currentDisplay = document.querySelector("#currentDisplay");
 const answerDisplay = document.querySelector("#currentAnswer");
 const allButtons = document.querySelectorAll("button");
@@ -82,6 +89,7 @@ const allButtons = document.querySelectorAll("button");
 let num = "";
 let a = "";
 let b = "";
+let c = ""; // for back space purpose
 let operator = "";
 let symbol = "";
 let currentDisplayValue = "";
@@ -210,6 +218,22 @@ const disableMostButtons = function () {
   });
 };
 
+const reset = function () {
+  num = "";
+  a = "";
+  b = "";
+  operator = "";
+  symbol = "";
+  currentDisplayValue = "";
+  currentDisplay.textContent = "";
+  answerDisplay.textContent = 0;
+  btnDot.disabled = false;
+  isEqualClicked = false;
+  allButtons.forEach(function (button) {
+    button.disabled = false;
+  });
+};
+
 btnDivide.addEventListener("click", function () {
   inputOperator("divide");
 });
@@ -226,22 +250,7 @@ btnAdd.addEventListener("click", function () {
   inputOperator("add");
 });
 
-btnClear.addEventListener("click", function () {
-  // reset with alert
-  num = "";
-  a = "";
-  b = "";
-  operator = "";
-  symbol = "";
-  currentDisplayValue = "";
-  currentDisplay.textContent = "";
-  answerDisplay.textContent = 0;
-  btnDot.disabled = false;
-  isEqualClicked = false;
-  allButtons.forEach(function (button) {
-    button.disabled = false;
-  });
-});
+btnClear.addEventListener("click", reset);
 
 btnEqual.addEventListener("click", function () {
   // isEqualClicked = true;
@@ -252,13 +261,80 @@ btnEqual.addEventListener("click", function () {
 });
 
 // Add a “backspace” button, so the user can undo if they click the wrong number.
-// Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
-//Read the MDN documentation for event.preventDefault to help solve this problem.
 
-// Keyboard support: Allow users to use the keyboard to input numbers and operators instead of clicking the buttons. You can achieve this by listening for keydown events and mapping the pressed key to its corresponding button.
+btnBackspace.addEventListener("click", function () {
+  let str = currentDisplay.textContent;
+
+  // if deleting the dot
+  if (str[str.length - 1] === ".") {
+    btnDot.disabled = false;
+  }
+
+  if (str.length === 0) {
+    reset();
+  } else if (str[str.length - 1] !== " ") {
+    let newNum = "";
+    if (num !== "") {
+      newNum = num;
+    } else if (a !== "") {
+      newNum = a;
+    } else {
+      return;
+    }
+
+    if (a === "" && num === "") {
+    } else if (num === "") {
+      currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+    } else {
+      newNum = num.toString();
+      num = newNum.slice(0, -1);
+      currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+    }
+  } else {
+    // when you want to delete the operator
+    // console.log(str[str.length - 1] === " ");
+    let previousOperator = operator;
+    operator = "";
+    num = a;
+    a = "";
+    currentDisplay.textContent = currentDisplay.textContent.slice(0, -3);
+
+    // let newNum = num;
+
+    // // console.log(operatorObj[previousOperator].contorary);
+    // currentDisplay.textContent = operate(
+    //   operatorObj[previousOperator].contorary,
+    //   answerDisplay.textContent,
+    //   newNum
+    // );
+  }
+
+  // if the last letter of the textContent is a number or ".", remove the last letter from num and renew the number
+
+  // if it's a (" " ? or operator symbol?) keep the symbol and the number you want to delete
+
+  // re-calcurate to previous and re-input to variable
+
+  // you cannot delete when the value is "" and execute clear function instead
+});
 
 // Negative numbers: Add support for negative numbers by allowing the user to input a negative sign (-) before the number.
 
-// Decimal precision: Limit the decimal precision of the result to a certain number of decimal places (e.g., 2) to avoid long decimals.
+btnPlusMinus.addEventListener("click", function () {
+  console.log("under construction");
+});
 
+// euro to jpy
+
+btnEuro.addEventListener("click", function () {
+  console.log("under construction");
+  //ask for rate input (with default)
+});
+
+// Keyboard support: Allow users to use the keyboard to input numbers and operators instead of clicking the buttons.
+//You can achieve this by listening for keydown events and mapping the pressed key to its corresponding button.
+// Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
+//Read the MDN documentation for event.preventDefault to help solve this problem.
 // Error handling: Add error handling to the code to handle edge cases such as division by zero or inputting invalid characters.
+
+// add sound
