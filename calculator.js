@@ -272,20 +272,42 @@ btnBackspace.addEventListener("click", function () {
   // if it's empty, just reset
   if (str.length === 0) {
     reset();
-  } 
+  }
+
+  // if the last letter is "- (minus)", delete it too
+  if (str[str.length - 1] === "-") {
+    num = "";
+    currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+  }
+
   // if the last thing is the operator Symbol, you cannot delete more
-  if (str[str.length - 1] === " "){
+  if (str[str.length - 1] === " ") {
     return;
   } else {
-      num = num.slice(0, -1);
-      currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
-    }
-  });
+    num = num.slice(0, -1);
+    currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+  }
+});
 
 // Negative numbers: Add support for negative numbers by allowing the user to input a negative sign (-) before the number.
 
 btnPlusMinus.addEventListener("click", function () {
-  console.log("under construction");
+  let str = currentDisplay.textContent;
+  let numLength = num.length * -1;
+
+  // if the last thing is the operator Symbol, you cannot input minus yet
+  if (str[str.length - 1] === " ") {
+    return;
+  }
+
+  // if the first letter of "num" is "-", change to ""(plus)
+  if (num[0] === "-") {
+    num = num.substring(1);
+  } else {
+    num = "-" + num;
+  }
+
+  currentDisplay.textContent = str.slice(0, numLength) + " " + num;
 });
 
 // euro to jpy
