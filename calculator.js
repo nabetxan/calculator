@@ -24,22 +24,22 @@ const operatorObj = {
   add: {
     function: add,
     symbol: "+",
-    contorary: "subtract",
+    // contorary: "subtract",
   },
   subtract: {
     function: subtract,
     symbol: "-",
-    contorary: "add",
+    // contorary: "add",
   },
   multiply: {
     function: multiply,
     symbol: "×",
-    contorary: "divide",
+    // contorary: "divide",
   },
   divide: {
     function: divide,
     symbol: "÷",
-    contorary: "multiply",
+    // contorary: "multiply",
   },
   equal: {
     symbol: "=",
@@ -89,7 +89,7 @@ const allButtons = document.querySelectorAll("button");
 let num = "";
 let a = "";
 let b = "";
-let c = ""; // for back space purpose
+// let c = ""; // for back space purpose
 let operator = "";
 let symbol = "";
 let currentDisplayValue = "";
@@ -261,62 +261,26 @@ btnEqual.addEventListener("click", function () {
 });
 
 // Add a “backspace” button, so the user can undo if they click the wrong number.
+// you can delete ONLY the number, not undo the operation
 
 btnBackspace.addEventListener("click", function () {
   let str = currentDisplay.textContent;
-
   // if deleting the dot
   if (str[str.length - 1] === ".") {
     btnDot.disabled = false;
   }
-
+  // if it's empty, just reset
   if (str.length === 0) {
     reset();
-  } else if (str[str.length - 1] !== " ") {
-    let newNum = "";
-    if (num !== "") {
-      newNum = num;
-    } else if (a !== "") {
-      newNum = a;
-    } else {
-      return;
-    }
-
-    if (a === "" && num === "") {
-    } else if (num === "") {
-      currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
-    } else {
-      newNum = num.toString();
-      num = newNum.slice(0, -1);
-      currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
-    }
+  } 
+  // if the last thing is the operator Symbol, you cannot delete more
+  if (str[str.length - 1] === " "){
+    return;
   } else {
-    // when you want to delete the operator
-    // console.log(str[str.length - 1] === " ");
-    let previousOperator = operator;
-    operator = "";
-    num = a;
-    a = "";
-    currentDisplay.textContent = currentDisplay.textContent.slice(0, -3);
-
-    // let newNum = num;
-
-    // // console.log(operatorObj[previousOperator].contorary);
-    // currentDisplay.textContent = operate(
-    //   operatorObj[previousOperator].contorary,
-    //   answerDisplay.textContent,
-    //   newNum
-    // );
-  }
-
-  // if the last letter of the textContent is a number or ".", remove the last letter from num and renew the number
-
-  // if it's a (" " ? or operator symbol?) keep the symbol and the number you want to delete
-
-  // re-calcurate to previous and re-input to variable
-
-  // you cannot delete when the value is "" and execute clear function instead
-});
+      num = num.slice(0, -1);
+      currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+    }
+  });
 
 // Negative numbers: Add support for negative numbers by allowing the user to input a negative sign (-) before the number.
 
