@@ -84,6 +84,8 @@ const btnEuro = document.getElementById("btnEuro");
 const btnPlusMinus = document.getElementById("btnPlusMinus");
 const currentDisplay = document.querySelector("#currentDisplay");
 const answerDisplay = document.querySelector("#currentAnswer");
+const fromCurrency = document.querySelector("#fromCurrency");
+const toCurrency = document.querySelector("#toCurrency");
 const allButtons = document.querySelectorAll("button");
 
 let num = "";
@@ -94,6 +96,8 @@ let operator = "";
 let symbol = "";
 let currentDisplayValue = "";
 let isEqualClicked = false;
+let isCurrencyMode = false;
+let rate = 0;
 
 //button
 // chat-kun
@@ -148,6 +152,17 @@ function inputNum(value) {
   //check if value is "." && it's first time
   if (value === ".") {
     btnDot.disabled = true;
+  }
+
+  if (isCurrencyMode) {
+    answerDisplay.textContent = rate * num;
+    btnPlusMinus.disabled = true;
+    btnBackspace.disabled = true;
+    btnDivide.disabled = true;
+    btnMultiply.disabled = true;
+    btnSubtract.disabled = true;
+    btnAdd.disabled = true;
+    btnEqual.disabled = true;
   }
 }
 
@@ -232,6 +247,11 @@ const reset = function () {
   allButtons.forEach(function (button) {
     button.disabled = false;
   });
+  fromCurrency.textContent = "Formula:";
+  toCurrency.textContent = "Answer:";
+  rate = 0;
+  btnEuro.textContent = "€→¥";
+  isCurrencyMode = false;
 };
 
 btnDivide.addEventListener("click", function () {
@@ -255,7 +275,6 @@ btnClear.addEventListener("click", reset);
 btnEqual.addEventListener("click", function () {
   // isEqualClicked = true;
   inputOperator("equal");
-
   // after "=", you can only click "clear"
   disableMostButtons();
 });
@@ -273,13 +292,11 @@ const backspaceButtonFunction = function () {
   if (str.length === 0) {
     reset();
   }
-
   // if the last letter is "- (minus)", delete it too
   if (str[str.length - 1] === "-") {
     num = "";
     currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
   }
-
   // if the last thing is the operator Symbol, you cannot delete more
   if (str[str.length - 1] === " ") {
     return;
@@ -301,14 +318,12 @@ const plusMinusButtonFunction = function () {
   if (str[str.length - 1] === " ") {
     return;
   }
-
   // if the first letter of "num" is "-", change to ""(plus)
   if (num[0] === "-") {
     num = num.substring(1);
   } else {
     num = "-" + num;
   }
-
   currentDisplay.textContent = str.slice(0, numLength) + " " + num;
 };
 btnPlusMinus.addEventListener("click", plusMinusButtonFunction);
@@ -316,15 +331,19 @@ btnPlusMinus.addEventListener("click", plusMinusButtonFunction);
 // euro to jpy
 
 btnEuro.addEventListener("click", function () {
-  console.log("under construction");
+  reset();
+  isCurrencyMode = true;
+  fromCurrency.textContent = "EUR";
+  toCurrency.textContent = "JPY";
   //ask for rate input (with default)
+  rate = window.prompt("Enter the exchange rate", 144);
+  btnEuro.textContent = "€→¥" + " (€1=¥" + rate + ")";
 });
 
 // Keyboard support: Allow users to use the keyboard to input numbers and operators instead of clicking the buttons.
 //You can achieve this by listening for keydown events and mapping the pressed key to its corresponding button.
 // Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
 //Read the MDN documentation for event.preventDefault to help solve this problem.
-// Error handling: Add error handling to the code to handle edge cases such as division by zero or inputting invalid characters.
 
 document.addEventListener("keydown", function (event) {
   switch (event.key) {
@@ -401,9 +420,7 @@ document.addEventListener("keydown", function (event) {
         inputNum(".");
       }
       break;
-
     default:
-      console.log(event.key);
       break;
   }
 });

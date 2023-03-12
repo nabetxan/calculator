@@ -5,12 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
     <title>Calculator</title>
   </head>
   <body>
     <div class="board">
       <div class="yokonarabi secondTakeTwo">
-        <div>Formula:</div>
+        <div id="fromCurrency">Formula:</div>
         <div id="currentDisplay"></div>
         <div id="clear">
           <button id="btnClear" class="button">Clear</button>
@@ -18,7 +24,7 @@
       </div>
 
       <div class="yokonarabi secondTakeTwo answer">
-        <div>Answer:</div>
+        <div id="toCurrency">Answer:</div>
         <div id="currentAnswer">0</div>
 
         <div class="operator">
@@ -28,7 +34,7 @@
 
       <div class="yokonarabi firstTakeTwo">
         <div class="operator">
-          <button id="btnEuro" class="button">🚧€→¥🚧</button>
+          <button id="btnEuro" class="button">€→¥</button>
         </div>
         <div class="operator">
           <button id="btnPlusMinus" class="button">+/-</button>
