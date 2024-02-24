@@ -1,428 +1,411 @@
-//functions for all of the basic math operators
-
-// add
-const add = function (a, b) {
-  return a + b;
-};
-
-// subtract
-const subtract = function (a, b) {
-  return a - b;
-};
-
-// multiply
-const multiply = function (a, b) {
-  return a * b;
-};
-
-// divide
-const divide = function (a, b) {
-  return a / b;
-};
-
-const operatorObj = {
-  add: {
-    function: add,
-    symbol: "+",
-    // contorary: "subtract",
-  },
-  subtract: {
-    function: subtract,
-    symbol: "-",
-    // contorary: "add",
-  },
-  multiply: {
-    function: multiply,
-    symbol: "×",
-    // contorary: "divide",
-  },
-  divide: {
-    function: divide,
-    symbol: "÷",
-    // contorary: "multiply",
-  },
-  equal: {
-    symbol: "=",
-  },
-};
-
-// Create a new function operate that takes an operator and 2 numbers
-// and then calls one of the above functions on the numbers.
-const operate = function (operator, a, b) {
-  return operatorObj[operator].function(Number(a), Number(b));
-};
-
-// get the HTML elements
-
-//chat-kun
-// const buttons = document.querySelectorAll(".button");
-// const handleClick = function (event) {
-//   return event.target.id;
-// };
-// buttons.forEach(function (button) {
-//   button.addEventListener("click", handleClick);
-// });
-const btnOne = document.getElementById("btnOne");
-const btnTwo = document.getElementById("btnTwo");
-const btnThree = document.getElementById("btnThree");
-const btnFour = document.getElementById("btnFour");
-const btnFive = document.getElementById("btnFive");
-const btnSix = document.getElementById("btnSix");
-const btnSeven = document.getElementById("btnSeven");
-const btnEight = document.getElementById("btnEight");
-const btnNine = document.getElementById("btnNine");
-const btnZero = document.getElementById("btnZero");
-const btnDot = document.getElementById("btnDot");
-const btnClear = document.getElementById("btnClear");
-const btnDivide = document.getElementById("btnDivide");
-const btnMultiply = document.getElementById("btnMultiply");
-const btnSubtract = document.getElementById("btnSubtract");
-const btnAdd = document.getElementById("btnAdd");
-const btnEqual = document.getElementById("btnEqual");
-const btnBackspace = document.getElementById("btnBackspace");
-const btnEuro = document.getElementById("btnEuro");
-const btnPlusMinus = document.getElementById("btnPlusMinus");
-const currentDisplay = document.querySelector("#currentDisplay");
-const answerDisplay = document.querySelector("#currentAnswer");
-const fromCurrency = document.querySelector("#fromCurrency");
-const toCurrency = document.querySelector("#toCurrency");
-const allButtons = document.querySelectorAll("button");
-
-let num = "";
-let a = "";
-let b = "";
-// let c = ""; // for back space purpose
-let operator = "";
-let symbol = "";
-let currentDisplayValue = "";
-let isEqualClicked = false;
-let isCurrencyMode = false;
-let rate = 0;
-
-//button
-// chat-kun
-// btnOne.addEventListener("click", handleClick("1"))
-// btnTwo.addEventListener("click", handleClick("2"))
-// When you are adding an event listener to the button elements, you need to pass
-// the function reference as an argument to the addEventListener method. However,
-// in your code, you are calling the handleClick function with an argument immediately
-// while adding the event listener. So, the handleClick function is actually getting called
-// before the event occurs and its result (undefined) is being passed as the event listener function.
-// To fix this, you can wrap the function reference in an anonymous function, like this:
-
-btnOne.addEventListener("click", function () {
-  inputNum("1");
-});
-btnTwo.addEventListener("click", function () {
-  inputNum("2");
-});
-btnThree.addEventListener("click", function () {
-  inputNum("3");
-});
-btnFour.addEventListener("click", function () {
-  inputNum("4");
-});
-btnFive.addEventListener("click", function () {
-  inputNum("5");
-});
-btnSix.addEventListener("click", function () {
-  inputNum("6");
-});
-btnSeven.addEventListener("click", function () {
-  inputNum("7");
-});
-btnEight.addEventListener("click", function () {
-  inputNum("8");
-});
-btnNine.addEventListener("click", function () {
-  inputNum("9");
-});
-btnZero.addEventListener("click", function () {
-  inputNum("0");
-});
-btnDot.addEventListener("click", function () {
-  inputNum(".");
-});
-
-//input numbers and "." . Display control//
-function inputNum(value) {
-  num = num + value;
-  currentDisplay.textContent = currentDisplay.textContent + value;
-  //can click Dot only once
-  //check if value is "." && it's first time
-  if (value === ".") {
-    btnDot.disabled = true;
-  }
-
-  if (isCurrencyMode) {
-    answerDisplay.textContent = rate * num;
-    btnPlusMinus.disabled = true;
-    btnBackspace.disabled = true;
-    btnDivide.disabled = true;
-    btnMultiply.disabled = true;
-    btnSubtract.disabled = true;
-    btnAdd.disabled = true;
-    btnEqual.disabled = true;
-  }
-}
-
-//input symbol. Display control//
-function inputSymbol(symbol) {
-  currentDisplay.textContent = currentDisplay.textContent + " " + symbol + " ";
-  btnDot.disabled = false;
-}
-
-//operator
-function inputOperator(value) {
-  //do nothing if no numbers are input yet
-  if (num === "") {
-    return;
-  }
-
-  // not allowing to divide by 0
-  if (
-    (Number(num) === 0 && value === "divide") ||
-    (Number(num) === 0 && operator === "divide")
-  ) {
-    answerDisplay.textContent = "you cannot divide by 0…";
-    disableMostButtons();
-    return;
-  }
-
-  if (a === "") {
-    a = num;
-    num = "";
-    operator = value;
-    symbol = operatorObj[operator].symbol;
-    inputSymbol(symbol);
-  } else if (a !== "" && value === "equal") {
-    b = num;
-    num = "";
-    symbol = operatorObj[value].symbol;
-    inputSymbol(symbol);
-    // You should round answers with long decimals so that they don’t overflow the screen.
-    a = operate(operator, a, b);
-    checkDecimal(a);
-  } else if (a !== "" && value !== "equal") {
-    b = num;
-    symbol = operatorObj[value].symbol; // value?
-    inputSymbol(symbol);
-    a = operate(operator, a, b);
-    checkDecimal(a);
-    b = "";
-    num = "";
-    operator = value;
-  } else if (a === "" && value === "equal") {
-  }
-}
-
-// if the answer doesn't have decimal, no need to show ".00"
-const checkDecimal = function (a) {
-  if (Number.isInteger(a)) {
-    answerDisplay.textContent = a;
-  } else {
-    answerDisplay.textContent = a.toFixed(2);
-  }
-};
-
-const disableMostButtons = function () {
-  allButtons.forEach(function (button) {
-    if (button !== btnClear) {
-      button.disabled = true;
+const calculatorButtons = [
+  {
+    type: "operator",
+    id: "add",
+    keyboard: "+",
+    display: "+",
+    function: (a, b) => {
+      return a + b;
     }
+  },
+  {
+    type: "operator",
+    id: "subtract",
+    keyboard: "-",
+    display: "-",
+    function: (a, b) => {
+      return a - b;
+    }
+  },
+  {
+    type: "operator",
+    id: "multiply",
+    keyboard: "*",
+    display: "×",
+    function: (a, b) => {
+      return a * b;
+    }
+  },
+  {
+    type: "operator",
+    id: "divide",
+    keyboard: "/",
+    display: "÷",
+    function: (a, b) => {
+      return a / b;
+    }
+  },
+  {
+    type: "equal",
+    id: "equal",
+    keyboard: "Enter",
+    display: "=",
+    function: () => {}
+  },
+  {
+    type: "number",
+    id: "one",
+    keyboard: "1",
+    display: "1",
+    value: 1
+  },
+  {
+    type: "number",
+    id: "two",
+    keyboard: "2",
+    display: "2",
+    value: 2
+  },
+  {
+    type: "number",
+    id: "three",
+    keyboard: "3",
+    display: "3",
+    value: 3
+  },
+  {
+    type: "number",
+    id: "four",
+    keyboard: "4",
+    display: "4",
+    value: 4
+  },
+  {
+    type: "number",
+    id: "five",
+    keyboard: "5",
+    display: "5",
+    value: 5
+  },
+  {
+    type: "number",
+    id: "six",
+    keyboard: "6",
+    display: "6",
+    value: 6
+  },
+  {
+    type: "number",
+    id: "seven",
+    keyboard: "7",
+    display: "7",
+    value: 7
+  },
+  {
+    type: "number",
+    id: "eight",
+    keyboard: "8",
+    display: "8",
+    value: 8
+  },
+  {
+    type: "number",
+    id: "nine",
+    keyboard: "9",
+    display: "9",
+    value: 9
+  },
+  {
+    type: "number",
+    id: "zero",
+    keyboard: "0",
+    display: "0",
+    value: 0
+  },
+  {
+    type: "dot",
+    id: "dot",
+    keyboard: ".",
+    display: ".",
+    value: "."
+  },
+  {
+    type: "plusMinus",
+    id: "plusMinus",
+    keyboard: "!",
+    function: (target) => {
+      plusMinus(target);
+    }
+  },
+  {
+    type: "other",
+    id: "clear",
+    keyboard: "Backspace",
+    function: () => {
+      clear();
+    }
+  },
+  {
+    type: "other",
+    id: "all-clear",
+    keyboard: "Delete",
+    function: () => {
+      reset("all");
+    }
+  },
+  {
+    type: "other",
+    id: "euro",
+    keyboard: "e",
+    function: () => {
+      reset("all");
+      dialog.className = "show";
+    }
+  }
+];
+
+const formulaDisplay = document.getElementById("formulaDisplay");
+const answerDisplay = document.getElementById("answer");
+const dialog = document.getElementById("dialog");
+const firstDisplayTitle = document.getElementById("firstDisplayTitle");
+const secondDisplayTitle = document.getElementById("secondDisplayTitle");
+const euroBtn = document.getElementById("euro");
+const btnDisableAfterEqual = document.querySelectorAll(".disable-after-equal");
+const btnDisableAfterEuro = document.querySelectorAll(".disable-after-euro");
+
+const createInitialState = () => ({
+  num: "",
+  a: "",
+  b: "",
+  operator: "",
+  symbol: "",
+  formulaDisplayText: [],
+  answerDisplayText: 0
+});
+
+let state = createInitialState();
+
+// addEventListener
+calculatorButtons.forEach((btn) => {
+  const k = document.getElementById(btn.id);
+  k.addEventListener("click", () => {
+    handleInput(btn);
   });
+});
+
+document.addEventListener("keydown", (e) => {
+  const k = calculatorButtons.find((btn) => btn.keyboard === e.key);
+  k && handleInput(k);
+});
+
+const handleInput = function (btn) {
+  //not allow second dot
+  if (btn.type === "dot" && state.num.includes(".")) {
+    return;
+  }
+  //if the "=" is at the end of the display, not allow to input anything after that except "other" and +/-
+  // TODO: this part is not necessary if button is disabled?
+  if (
+    formulaDisplay.textContent.endsWith("=") &&
+    btn.type !== "other" &&
+    btn.type !== "plusMinus"
+  ) {
+    return;
+  }
+
+  if (btn.type === "number") {
+    state.num = state.num + btn.display;
+    updateFormulaDisplay(btn);
+  } else if (btn.type === "plusMinus") {
+    if (formulaDisplay.textContent.endsWith("=")) {
+      btn.function("answer");
+    } else {
+      btn.function("formula");
+    }
+  } else if (btn.type === "dot") {
+    //if numbers are not input yet, start with 0.
+    if (state.num === "") {
+      state.num = "0.";
+      updateFormulaDisplay({ display: "0." });
+      return;
+    }
+    state.num = state.num + btn.display;
+    updateFormulaDisplay(btn);
+  } else if (btn.type === "operator") {
+    //do nothing if numbers are not input yet
+    if (state.num === "") {
+      return;
+    }
+    // not allowing to divide by 0
+    if (Number(state.num) === 0 && btn.id === "divide") {
+      answerDisplay.textContent = "you cannot divide by 0…";
+      return;
+    }
+    // if a is not set yet, what you have in num is the number for a
+    if (state.a === "") {
+      state.a = state.num;
+      state.num = ""; // clear num and get ready for b
+      state.operator = btn;
+      updateFormulaDisplay(btn);
+      // if a is set already, what you have in num is the number for b
+    } else if (state.a !== "") {
+      state.b = state.num;
+      state.num = "";
+      // since it was not the equal key, calculate what you have and go on
+      const answer = state.operator.function(Number(state.a), Number(state.b));
+      state.a = answer.toString();
+      updateAnswerDisplay(checkDecimal(answer));
+      state.b = "";
+      state.num = "";
+      state.operator = btn;
+      updateFormulaDisplay(btn);
+    }
+  } else if (btn.type === "equal") {
+    if (state.num === "" || state.a === "") {
+      return;
+    }
+    state.b = state.num;
+    state.num = "";
+    const answer = state.operator.function(Number(state.a), Number(state.b));
+    updateFormulaDisplay(btn);
+    updateAnswerDisplay(checkDecimal(answer));
+    btnDisableAfterEqual.forEach((btn) => {
+      btn.classList.add("disable");
+      btn.disabled = true;
+    });
+  } else if (btn.type === "other") {
+    btn.function();
+    if (isEuroMode && btn.id === "clear") {
+      const answer = Number(state.formulaDisplayText.join("")) * exchangeRate;
+      updateAnswerDisplay(answer);
+    }
+  } else return;
 };
 
-const reset = function () {
-  num = "";
-  a = "";
-  b = "";
-  operator = "";
-  symbol = "";
-  currentDisplayValue = "";
-  currentDisplay.textContent = "";
+const updateFormulaDisplay = function (btn) {
+  state.formulaDisplayText.push(btn.display);
+  formulaDisplay.textContent = state.formulaDisplayText.join("");
+  if (isEuroMode) {
+    const answer = Number(state.formulaDisplayText.join("")) * exchangeRate;
+    updateAnswerDisplay(answer);
+  }
+};
+
+const updateAnswerDisplay = function (answer) {
+  state.answerDisplayText = answer;
+  answerDisplay.textContent = state.answerDisplayText;
+};
+
+const reset = (target) => {
+  state = createInitialState();
+  formulaDisplay.textContent = "";
   answerDisplay.textContent = 0;
-  btnDot.disabled = false;
-  isEqualClicked = false;
-  allButtons.forEach(function (button) {
-    button.disabled = false;
+
+  if (target === "all") {
+    firstDisplayTitle.textContent = "Formula:";
+    secondDisplayTitle.textContent = "Answer:";
+    euroBtn.textContent = "€→¥";
+    isEuroMode = false;
+    btnDisableAfterEqual.forEach((btn) => {
+      btn.classList.remove("disable");
+      btn.disabled = false;
+    });
+    btnDisableAfterEuro.forEach((btn) => {
+      btn.classList.remove("disable");
+      btn.disabled = false;
+    });
+  } else {
+    return;
+  }
+};
+
+const clear = () => {
+  // if the last letter is "=" or formula is empty, clear all
+  if (
+    formulaDisplay.textContent.endsWith("=") ||
+    state.formulaDisplayText.length === 0
+  ) {
+    reset(isEuroMode ? "euro" : "all");
+    return;
+  }
+
+  //if num is NOT "", delete one letter
+  if (state.num !== "") {
+    let newNum = state.num.slice(0, -1);
+    state.num = newNum;
+    // when num is "", delete operator if it's not ""
+    // also move a value to num value so that operator will work
+  } else if (state.operator !== "") {
+    state.operator = "";
+    state.num = state.a;
+    state.a = "";
+    // when both num and operator is "" reset
+  } else {
+    reset(isEuroMode ? "euro" : "all");
+    return;
+  }
+
+  // common
+  state.formulaDisplayText.pop();
+  const newStr = formulaDisplay.textContent.slice(0, -1);
+  formulaDisplay.textContent = newStr;
+};
+
+// round answers with long decimals so that they don’t overflow the screen.
+const checkDecimal = function (number) {
+  if (Number.isInteger(Number(number))) {
+    return number;
+  } else {
+    // toFixed will always return 10digits, so slice last 0
+    let formattedNumber = Number.parseFloat(Number(number)).toFixed(6);
+    while (formattedNumber.endsWith("0")) {
+      formattedNumber = formattedNumber.slice(0, -1);
+    }
+    return formattedNumber;
+  }
+};
+
+const plusMinus = function (target) {
+  if (target === "formula") {
+    if (!state.num) {
+      state.formulaDisplayText.push("-");
+      formulaDisplay.textContent = state.formulaDisplayText.join("");
+      state.num = state.num + "-";
+    } else if (state.num === "-") {
+      //remove "-"
+      state.formulaDisplayText.pop();
+      const newStr = formulaDisplay.textContent.slice(0, -1);
+      formulaDisplay.textContent = newStr;
+      state.num = "";
+    } else if (!state.num.startsWith("-")) {
+      //when there is a number in num that is not negative, num x(-1)
+      const numLength = state.num.length * -1;
+      state.formulaDisplayText.splice(numLength, 0, "-");
+      formulaDisplay.textContent = state.formulaDisplayText.join("");
+      state.num = "-" + state.num;
+    } else if (state.num.startsWith("-")) {
+      const numLength = state.num.length * -1;
+      state.formulaDisplayText.splice(numLength, 1);
+      formulaDisplay.textContent = state.formulaDisplayText.join("");
+      state.num = state.num.substring(1);
+    } else {
+      return;
+    }
+  } else if (target === "answer") {
+    const answer = state.answerDisplayText * -1;
+    updateAnswerDisplay(answer);
+  }
+};
+
+let exchangeRate = 160;
+let isEuroMode = false;
+const submit = document.getElementById("submit");
+
+submit.addEventListener("click", () => {
+  exchangeRate = document.getElementById("exchangeRate").value;
+  if (!exchangeRate) {
+    exchangeRate = 160;
+  }
+  firstDisplayTitle.textContent = "EUR";
+  secondDisplayTitle.textContent = "JPY";
+  euroBtn.textContent = "€1=¥" + exchangeRate;
+  dialog.className = "hidden";
+  isEuroMode = true;
+  btnDisableAfterEuro.forEach((btn) => {
+    btn.classList.add("disable");
+    btn.disabled = true;
   });
-  fromCurrency.textContent = "Formula:";
-  toCurrency.textContent = "Answer:";
-  rate = 0;
-  btnEuro.textContent = "€→¥";
-  isCurrencyMode = false;
-};
-
-btnDivide.addEventListener("click", function () {
-  inputOperator("divide");
+  state = createInitialState();
+  formulaDisplay.textContent = "";
+  answerDisplay.textContent = 0;
 });
-
-btnMultiply.addEventListener("click", function () {
-  inputOperator("multiply");
-});
-
-btnSubtract.addEventListener("click", function () {
-  inputOperator("subtract");
-});
-
-btnAdd.addEventListener("click", function () {
-  inputOperator("add");
-});
-
-btnClear.addEventListener("click", reset);
-
-btnEqual.addEventListener("click", function () {
-  // isEqualClicked = true;
-  inputOperator("equal");
-  // after "=", you can only click "clear"
-  disableMostButtons();
-});
-
-// Add a “backspace” button, so the user can undo if they click the wrong number.
-// you can delete ONLY the number, not undo the operation
-
-const backspaceButtonFunction = function () {
-  let str = currentDisplay.textContent;
-  // if deleting the dot
-  if (str[str.length - 1] === ".") {
-    btnDot.disabled = false;
-  }
-  // if it's empty, just reset
-  if (str.length === 0) {
-    reset();
-  }
-  // if the last letter is "- (minus)", delete it too
-  if (str[str.length - 1] === "-") {
-    num = "";
-    currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
-  }
-  // if the last thing is the operator Symbol, you cannot delete more
-  if (str[str.length - 1] === " ") {
-    return;
-  } else {
-    num = num.slice(0, -1);
-    currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
-  }
-};
-
-btnBackspace.addEventListener("click", backspaceButtonFunction);
-
-// Negative numbers: Add support for negative numbers by allowing the user to input a negative sign (-) before the number.
-
-const plusMinusButtonFunction = function () {
-  let str = currentDisplay.textContent;
-  let numLength = num.length * -1;
-
-  // if the last thing is the operator Symbol, you cannot input minus yet
-  if (str[str.length - 1] === " ") {
-    return;
-  }
-  // if the first letter of "num" is "-", change to ""(plus)
-  if (num[0] === "-") {
-    num = num.substring(1);
-  } else {
-    num = "-" + num;
-  }
-  currentDisplay.textContent = str.slice(0, numLength) + " " + num;
-};
-btnPlusMinus.addEventListener("click", plusMinusButtonFunction);
-
-// euro to jpy
-
-btnEuro.addEventListener("click", function () {
-  reset();
-  isCurrencyMode = true;
-  fromCurrency.textContent = "EUR";
-  toCurrency.textContent = "JPY";
-  //ask for rate input (with default)
-  rate = window.prompt("Enter the exchange rate", 144);
-  btnEuro.textContent = "€→¥" + " (€1=¥" + rate + ")";
-});
-
-// Keyboard support: Allow users to use the keyboard to input numbers and operators instead of clicking the buttons.
-//You can achieve this by listening for keydown events and mapping the pressed key to its corresponding button.
-// Add keyboard support! You might run into an issue where keys such as (/) might cause you some trouble.
-//Read the MDN documentation for event.preventDefault to help solve this problem.
-
-document.addEventListener("keydown", function (event) {
-  switch (event.key) {
-    case "0":
-      inputNum(event.key);
-      break;
-    case "1":
-      inputNum(event.key);
-      break;
-    case "2":
-      inputNum(event.key);
-      break;
-    case "3":
-      inputNum(event.key);
-      break;
-    case "4":
-      inputNum(event.key);
-      break;
-    case "5":
-      inputNum(event.key);
-      break;
-    case "6":
-      inputNum(event.key);
-      break;
-    case "7":
-      inputNum(event.key);
-      break;
-    case "8":
-      inputNum(event.key);
-      break;
-    case "9":
-      inputNum(event.key);
-      break;
-
-    // Add cases for the other buttons
-    case "Backspace":
-      backspaceButtonFunction();
-      break;
-    case "-":
-      if (event.shiftKey) {
-        plusMinusButtonFunction();
-      } else {
-        inputOperator("subtract");
-      }
-      break;
-    case "+":
-      if (event.shiftKey) {
-        plusMinusButtonFunction();
-      } else {
-        inputOperator("add");
-      }
-      break;
-    // case "-":
-    //   inputOperator("subtract");
-    //   break;
-    case "*":
-      inputOperator("multiply");
-      break;
-    case "/":
-      inputOperator("divide");
-      break;
-    case "=":
-    case "Enter":
-      // isEqualClicked = true;
-      inputOperator("equal");
-      // after "=", you can only click "clear"
-      disableMostButtons();
-      break;
-    case "Delete":
-      reset();
-      break;
-    case ".":
-      if (btnDot.disabled === false) {
-        inputNum(".");
-      }
-      break;
-    default:
-      break;
-  }
-});
-
-// add sound
