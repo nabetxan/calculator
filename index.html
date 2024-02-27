@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,68 +14,131 @@
     <title>Calculator</title>
   </head>
   <body>
-    <div class="board">
-      <div class="yokonarabi secondTakeTwo">
-        <div id="fromCurrency">Formula:</div>
-        <div id="currentDisplay"></div>
-        <div id="clear">
-          <button id="btnClear" class="button">Clear</button>
+    <div id="calculator">
+      <div class="w-full">
+        <div id="first-row">
+          <div class="flex-col display-field">
+            <div id="firstDisplayTitle">Formula:</div>
+            <div id="formulaDisplay"></div>
+          </div>
+          <div>
+            <button id="clear" class="button">Clear</button>
+          </div>
         </div>
-      </div>
 
-      <div class="yokonarabi secondTakeTwo answer">
-        <div id="toCurrency">Answer:</div>
-        <div id="currentAnswer">0</div>
+        <div id="second-row" class="dark-bg">
+          <div class="flex-col display-field">
+            <div id="secondDisplayTitle">Answer:</div>
+            <div id="answer">0</div>
+          </div>
+          <div>
+            <button id="all-clear" class="button">All Clear</button>
+          </div>
+        </div>
 
-        <div class="operator">
-          <button id="btnBackspace" class="button">←</button>
-        </div>
-      </div>
+        <div id="third-row">
+          <div class="operator">
+            <button id="euro" class="button">€→¥</button>
+            <div id="dialog" class="hidden">
+              Enter the JPY exchange rate
 
-      <div class="yokonarabi firstTakeTwo">
-        <div class="operator">
-          <button id="btnEuro" class="button">€→¥</button>
+              <div>
+                <label>1 EURO = </label>
+                <input id="exchangeRate" type="number" placeholder="160" />円
+              </div>
+              <button id="submit" type="button">Submit</button>
+            </div>
+          </div>
+          <div class="operator">
+            <button id="plusMinus" class="button disable-after-euro">
+              +/-
+            </button>
+          </div>
+          <div class="operator">
+            <button
+              id="divide"
+              class="button disable-after-equal disable-after-euro"
+            >
+              ÷
+            </button>
+          </div>
         </div>
-        <div class="operator">
-          <button id="btnPlusMinus" class="button">+/-</button>
-        </div>
-        <div class="operator">
-          <button id="btnDivide" class="button">÷</button>
-        </div>
-      </div>
 
-      <div class="yokonarabi">
-        <div class="digit"><button id="btnSeven" class="button">7</button></div>
-        <div class="digit"><button id="btnEight" class="button">8</button></div>
-        <div class="digit"><button id="btnNine" class="button">9</button></div>
-        <div class="operator">
-          <button id="btnMultiply" class="button">×</button>
+        <div id="fourth-row">
+          <div class="digit">
+            <button id="seven" class="button disable-after-equal">7</button>
+          </div>
+          <div class="digit">
+            <button id="eight" class="button disable-after-equal">8</button>
+          </div>
+          <div class="digit">
+            <button id="nine" class="button disable-after-equal">9</button>
+          </div>
+          <div class="operator">
+            <button
+              id="multiply"
+              class="button disable-after-equal disable-after-euro"
+            >
+              ×
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="yokonarabi">
-        <div class="digit"><button id="btnFour" class="button">4</button></div>
-        <div class="digit"><button id="btnFive" class="button">5</button></div>
-        <div class="digit"><button id="btnSix" class="button">6</button></div>
-        <div class="operator">
-          <button id="btnSubtract" class="button">-</button>
+        <div id="fifth-row">
+          <div class="digit">
+            <button id="four" class="button disable-after-equal">4</button>
+          </div>
+          <div class="digit">
+            <button id="five" class="button disable-after-equal">5</button>
+          </div>
+          <div class="digit">
+            <button id="six" class="button disable-after-equal">6</button>
+          </div>
+          <div class="operator">
+            <button
+              id="subtract"
+              class="button disable-after-equal disable-after-euro"
+            >
+              -
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="yokonarabi">
-        <div class="digit"><button id="btnOne" class="button">1</button></div>
-        <div class="digit"><button id="btnTwo" class="button">2</button></div>
-        <div class="digit"><button id="btnThree" class="button">3</button></div>
-        <div class="operator">
-          <button id="btnAdd" class="button">+</button>
+        <div id="sixth-row">
+          <div class="digit">
+            <button id="one" class="button disable-after-equal">1</button>
+          </div>
+          <div class="digit">
+            <button id="two" class="button disable-after-equal">2</button>
+          </div>
+          <div class="digit">
+            <button id="three" class="button disable-after-equal">3</button>
+          </div>
+          <div class="operator">
+            <button
+              id="add"
+              class="button disable-after-equal disable-after-euro"
+            >
+              +
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="yokonarabi firstTakeTwo">
-        <div class="digit"><button id="btnZero" class="button">0</button></div>
-        <div class="digit"><button id="btnDot" class="button">.</button></div>
-        <div class="operator">
-          <button id="btnEqual" class="button">=</button>
+        <div id="seventh-row">
+          <div class="digit">
+            <button id="zero" class="button disable-after-equal">0</button>
+          </div>
+          <div class="digit">
+            <button id="dot" class="button disable-after-equal">.</button>
+          </div>
+          <div class="operator">
+            <button
+              id="equal"
+              class="button disable-after-equal disable-after-euro"
+            >
+              =
+            </button>
+          </div>
         </div>
       </div>
     </div>
